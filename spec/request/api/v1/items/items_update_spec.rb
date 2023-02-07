@@ -6,6 +6,7 @@ describe "Items API", type: :request do
     create_list(:item, 10)
 
     id = Item.first.id
+    
     item_params = ({
       "name": "value1",
       "description": "value2",
@@ -16,13 +17,13 @@ describe "Items API", type: :request do
 
     patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate(item: item_params)
 
-    created_item = Item.last
+    item = Item.find_by(id: id)
 
 
    expect(response).to be_successful
-   expect(created_item.name).to eq(item_params[:name])
-   expect(created_item.description).to eq(item_params[:description])
-   expect(created_item.unit_price).to eq(item_params[:unit_price])
-   expect(created_item.merchant_id).to eq(item_params[:merchant_id])
+   expect(item.name).to eq(item_params[:name])
+   expect(item.description).to eq(item_params[:description])
+   expect(item.unit_price).to eq(item_params[:unit_price])
+   expect(item.merchant_id).to eq(item_params[:merchant_id])
   end
 end
