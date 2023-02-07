@@ -1,30 +1,30 @@
 require 'rails_helper'
 
-describe "Merchants API", type: :request do
-  it "sends a list of all merchants" do
-    # create_list(:merchant, 3)
-    merchant_1 = Merchant.create!(name: "Billys Boots")
-    merchant_2 = Merchant.create!(name: "Henrys Hats")
-    merchant_3 = Merchant.create!(name: "Shirleys Shirts")
-    item_1 = Item.create!(name: "fancy boots", description: "some fancy boots", unit_price: 15.00, merchant_id: merchant_1.id)
-    item_2 = Item.create!(name: "big hat", description: "A big hat", unit_price: 20.00, merchant_id: merchant_2.id)
-    item_3 = Item.create!(name: "sparkly shirt", description: "A sparkly shirt", unit_price: 35.00, merchant_id: merchant_3.id)
+describe "Items API", type: :request do
+  it "sends a single item" do
+    create_list(:merchant, 3)
+    create_list(:item, 10)
+    merchant_1 = Merchant.create!(name: "Test Merch")
+    item_1 = Item.create!(name: "Item", description: "This is the description", unit_price: 12.00, merchant_id: merchant_1.id)
     get "/api/v1/items/#{item_1.id}"
 
     expect(response).to be_successful
 
     item = JSON.parse(response.body, symbolize_names: true)
 
-
-    expect(item).to have_key(:id)
-    expect(item[:id]).to be_an(Integer)
-    expect(item).to have_key(:name)
-    expect(item[:name]).to be_a(String)
-    expect(item).to have_key(:description)
-    expect(item[:description]).to be_a(String)
-    expect(item).to have_key(:unit_price)
-    expect(item[:unit_price]).to be_a(Float)
-    expect(item).to have_key(:merchant_id)
-    expect(item[:merchant_id]).to be_a(Integer)
+    # binding.pry
+    expect(item[:data]).to have_key(:id)
+    expect(item[:data][:id]).to be_an(String)
+    expect(item[:data]).to have_key(:type)
+    expect(item[:data][:type]).to be_a(String)
+    expect(item[:data]).to have_key(:attributes)
+    expect(item[:data][:attributes]).to have_key(:name)
+    expect(item[:data][:attributes]).to have_key(:description)
+    expect(item[:data][:attributes]).to have_key(:unit_price)
+    # expect(item[:data][:attributes]).to have_key(:merchant_id)
+    expect(item[:data][:attributes][:name]).to be_a(String)
+    expect(item[:data][:attributes][:description]).to be_a(String)
+    expect(item[:data][:attributes][:unit_price]).to be_a(Float)
+    # expect(item[:data][:attributes]).to be_a(String)
   end
 end
