@@ -6,12 +6,12 @@ describe "Items API", type: :request do
     create_list(:item, 10)
 
     id = Item.first.id
-    
+    merchant_id = Merchant.first.id
     item_params = ({
       "name": "value1",
       "description": "value2",
       "unit_price": 100.99,
-      "merchant_id": 14
+      "merchant_id": merchant_id
     })
     headers = {"CONTENT_TYPE" => "application/json"}
 

@@ -18,6 +18,21 @@ class Api::V1::ItemsController < ApplicationController
     render json: ItemSerializer.new(item)
   end
 
+  def destroy
+    item = Item.find(params[:id])
+    item.invoices.each do |invoice| 
+      if invoice.delete_with_last_item? == true
+        invoice.invoice_items.each do |ii|
+            ii.destroy
+          end
+          invoice.destroy
+        end
+      end
+
+    item.destroy
+  end
+
+
   private
 
   def item_params
