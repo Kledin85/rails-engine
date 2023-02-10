@@ -32,6 +32,21 @@ class Api::V1::ItemsController < ApplicationController
     item.destroy
   end
 
+  def find
+    # binding.pry
+    if params[:name]
+    render json: ItemSerializer.new(item = Item.where('name ILIKE ?', "%#{params[:name]}%")
+    .order(:name)
+    .first)
+    elsif params[:max_price] && params[:min_price]
+      render json: ItemSerializer.new(item = Item.where('unit_price >= ?', "#{params[:min_price]}").where('unit_price <= ?', "#{params[:max_price]}").first)
+    elsif params[:min_price]
+      render json: ItemSerializer.new(item = Item.where('unit_price >= ?', "#{params[:min_price]}").first)
+    elsif params[:max_price]
+      render json: ItemSerializer.new(item = Item.where('unit_price <= ?', "#{params[:max_price]}").first)
+    end
+  end
+
 
   private
 
