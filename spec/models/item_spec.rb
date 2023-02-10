@@ -11,26 +11,5 @@ RSpec.describe Item, type: :model do
     it { should have_many(:invoices).through(:invoice_items) }
     it { should belong_to :merchant }
   end
-    
-  # it '#delete_item' do
-  #   create_list(:merchant, 10)
-  #   create_list(:invoice_item, 12)
-
-  #   item = Item.all.shuffle.shuffle.first
-  #   invoices = item.invoices
-  #   expect(Item.all.length).to eq(12)
-
-  #   item.delete_item
-
-  #   expect(Item.all.length).to eq(11)
-  #   # binding.pry
-  #   # invoices.each do |invoice|
-  #   #   invoice.delete if invoice.items.length == 1
-  #   # end
-  #   # end
-
-  #   # item.delete_item
-
-
-  # end
+  
 end

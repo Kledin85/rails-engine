@@ -9,13 +9,17 @@ class Api::V1::ItemsController < ApplicationController
 
   def create
     new_item = Item.create(item_params)
-    render json: ItemSerializer.new(new_item)
+    render json: ItemSerializer.new(new_item), status: 201
   end
 
   def update
     item = Item.find(params[:id])
     item.update(item_params)
-    render json: ItemSerializer.new(item)
+    begin
+      render json: ItemSerializer.new(item)
+    rescue => error
+      render json: ErrorSerializer.error_json(error), status: 404
+    end
   end
 
   def destroy
@@ -33,17 +37,21 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def find
-    # binding.pry
-    if params[:name]
-    render json: ItemSerializer.new(item = Item.where('name ILIKE ?', "%#{params[:name]}%")
-    .order(:name)
-    .first)
-    elsif params[:max_price] && params[:min_price]
-      render json: ItemSerializer.new(item = Item.where('unit_price >= ?', "#{params[:min_price]}").where('unit_price <= ?', "#{params[:max_price]}").first)
-    elsif params[:min_price]
-      render json: ItemSerializer.new(item = Item.where('unit_price >= ?', "#{params[:min_price]}").first)
-    elsif params[:max_price]
-      render json: ItemSerializer.new(item = Item.where('unit_price <= ?', "#{params[:max_price]}").first)
+    begin
+      if params[:name]
+        render json: ItemSerializer.new(item = Item.where('name ILIKE ?', "%#{params[:name]}%").order(:name).first)
+      elsif params[:max_price] && params[:min_price]
+        render json: ItemSerializer.new(item = Item.where('unit_price >= ?', "#{params[:min_price]}").where('unit_price <= ?', "#{params[:max_price]}").first)
+      elsif params[:min_price]
+        render json: ItemSerializer.new(item = Item.where('unit_price >= ?', "#{params[:min_price]}").order(:name).first)
+      elsif params[:max_price]
+          max_price = Item.where
+          if params[:max_price] 
+            render json: ItemSerializer.new(item = Item.where('unit_price <= ?', "#{params[:max_price]}").first)
+          end
+      end
+    rescue => error
+      render json: ErrorSerializer.error_json(error), :status => 404
     end
   end
 

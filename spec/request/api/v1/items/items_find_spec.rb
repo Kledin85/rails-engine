@@ -49,7 +49,6 @@ describe "Items API", type: :request do
     get "/api/v1/items/find?max_price=50"
 
     found_item = JSON.parse(response.body, symbolize_names: true)
-    # binding.pry
     expect(response).to be_successful
 
     expect(found_item[:data][:id]).to be_a(String)
@@ -68,7 +67,6 @@ describe "Items API", type: :request do
     get "/api/v1/items/find?min_price=40&max_price=70"
 
     found_item = JSON.parse(response.body, symbolize_names: true)
-    # binding.pry
     expect(response).to be_successful
 
     expect(found_item[:data][:id]).to be_a(String)
