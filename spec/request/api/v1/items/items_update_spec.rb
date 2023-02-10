@@ -40,11 +40,9 @@ describe "Items API", type: :request do
         "merchant_id": 25
       })
       headers = {"CONTENT_TYPE" => "application/json"}
-        binding.pry
       patch "/api/v1/items/#{item_1.id}", headers: headers, params: JSON.generate(item: item_params)
       
       error = JSON.parse(response.body, symbolize_names: true)
-      binding.pry
       expect(response).to be_unsuccessful
     end
   end
